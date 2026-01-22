@@ -19,7 +19,10 @@ class CardController extends Controller
         return view(
             'cards.card_list',
             [
-                'cards' => Card::where('player_id', $player->id)->get(),
+                'cards' => Card::where('player_id', $player->id)->get()
+                    ->sortBy('card_num')
+                    ->sortBy('cardSet.card_set_name')
+                    ->sortBy('cardSet.year'),
                 'title' => "$player->first_name $player->last_name Cards"
             ]
         );
@@ -30,7 +33,10 @@ class CardController extends Controller
         return view(
             'cards.card_list_sets',
             [
-                'cards' => Card::where('card_set_id', $cardSet->id)->get(),
+                'cards' => Card::where('card_set_id', $cardSet->id)->get()
+                    ->sortBy('card_num')
+                    ->sortBy('cardSet.card_set_name')
+                    ->sortBy('cardSet.year'),
                 'title' => "$cardSet->year $cardSet->card_set_name Cards"
             ]
         );
