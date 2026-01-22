@@ -1,0 +1,34 @@
+<x-app>
+    <h1 class="text-2xl font-bold mb-4">{{ $title ?? 'Cards'}}</h1>
+
+    <table class="min-w-full bg-slate-700 border border-gray-200 px-40 mb-10">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b border-gray-200 text-left">Year/Card Set</th>
+                <th class="py-2 px-4 border-b border-gray-200 text-left">Subset/Info</th>
+                <th class="py-2 px-4 border-b border-gray-200 text-left">Card Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($cards as $card)
+                <tr>
+                    <td class="py-2 px-4 border-b border-gray-200">
+                        <a class="hover:underline" href="{{ route('cards.cardset', $card->cardSet) }}">{{ $card->cardSet->year }} {{ $card->cardSet->card_set_name }}</a>
+                    </td>
+                    <td class="py-2 px-4 border-b border-gray-200">
+                        {{ $card->subset_info }}
+                    </td>
+                    <td class="py-2 px-4 border-b border-gray-200">
+                        {{ $card->card_num }}
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="4" class="py-2 px-4 border-b border-gray-200 text-center">
+                        No cards found.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</x-app>
