@@ -12,8 +12,8 @@ class Player extends Model
         'last_name',
     ];
 
-    public function cards(): HasMany
+    public function cardList(): HasMany
     {
-        return $this->hasMany(Card::class, 'player');
+        return $this->hasMany(Card::class);
     }
 }

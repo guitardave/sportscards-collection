@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Player;
+use Illuminate\Support\Facades\Gate;
 
 class PlayerController extends Controller
 {
@@ -13,9 +14,8 @@ class PlayerController extends Controller
      */
     public function index()
     {
-        return view("players.index", [
-            "players" => Player::all()
-        ]);
+        $players = Player::all()->sortBy('last_name');
+        return view("players.index", ["players" => $players]);
     }
 
     /**
@@ -23,6 +23,7 @@ class PlayerController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Player::class);
         return view("players.create");
     }
 
@@ -31,16 +32,14 @@ class PlayerController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Player $player)
-    {
-        $player = Player::find($player);
-        return view("players.show", compact($player));
+        $validated = $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+        ]);
+        if($validated) {
+            Player::create($validated);
+        }
+        return redirect()->route('players.index');
     }
 
     /**
@@ -48,15 +47,23 @@ class PlayerController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        Gate::authorize('update', Player::find($id));
+        return view("players.edit");
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Player $player)
     {
-        //
+        $validated = $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+        ]);
+        if($validated) {
+            $player->update($validated);
+        }
+        return redirect()->route('players.index');
     }
 
     /**
@@ -64,6 +71,10 @@ class PlayerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $player = Player::findOrFail($id);
+        if ($player->cardList->count() > 0)
+            return redirect()->route('players.index')->with('error', 'Cannot delete player with cards.');
+        $player->delete();
+        return redirect()->route('players.index');
     }
 }

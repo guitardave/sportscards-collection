@@ -7,6 +7,8 @@
                 <th class="py-2 px-4 border-b border-gray-200 text-left">Player</th>
                 <th class="py-2 px-4 border-b border-gray-200 text-left">Subset/Info</th>
                 <th class="py-2 px-4 border-b border-gray-200 text-left">Card Number</th>
+                <th class="py-2 px-4 border-b border-gray-200 text-left">Condition</th>
+                <th class="py-2 px-4 border-b border-gray-200 text-left">Graded</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +22,12 @@
                     </td>
                     <td class="py-2 px-4 border-b border-gray-200">
                         {{ $card->card_num }}
+                    </td>
+                    <td class="py-2 px-4 border-b border-gray-200">
+                        {{ $card->condition }}
+                    </td>
+                    <td class="py-2 px-4 border-b border-gray-200">
+                        {{ $card->is_graded === 0 ? 'No' : 'Yes' }}
                     </td>
                 </tr>
             @empty
