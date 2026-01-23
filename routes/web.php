@@ -10,12 +10,11 @@ Route::post('/login', [App\Http\Controllers\AuthController::class, 'store'])->na
 Route::get("cards/",[App\Http\Controllers\CardController::class, "index"])->name("cards.index");
 Route::get("cards/player/{player}", [App\Http\Controllers\CardController::class, "card_list"])->name("cards.player");
 Route::get("cards/cardset/{cardSet}", [App\Http\Controllers\CardController::class, "card_list_sets"])->name("cards.cardset");
-Route::get('cardsets/', [App\Http\Controllers\CardSetController::class, 'index'])->name('cardsets.index');
-
-Route::resource("players", App\Http\Controllers\PlayerController::class)->only('index');
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'destroy'])->name('logout');
+    Route::resource("players", App\Http\Controllers\PlayerController::class)->only(['index', 'create', 'store']);
+    Route::resource("cardsets", App\Http\Controllers\CardSetController::class)->only(['index', 'create', 'store']);
 });
 
 Route::fallback(fn () => view('404'))->name('404');

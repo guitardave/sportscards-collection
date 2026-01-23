@@ -10,6 +10,7 @@ class CardSet extends Model
     protected $fillable = [
         'year',
         'card_set_name',
+        'sport',
     ];
 
     public function cards(): HasMany
